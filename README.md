@@ -1,5 +1,9 @@
 # 🌐 Traductor Multilenguaje con Fallbacks
 
+[![Deploy to GitHub Pages](https://github.com/David7ce/translator-multilang/actions/workflows/deploy.yml/badge.svg)](https://github.com/David7ce/translator-multilang/actions/workflows/deploy.yml)
+
+🔗 **Demo:** https://David7ce.github.io/translator-multilang/
+
 Proyecto web desarrollado en **React + TypeScript** que permite traducir texto desde un idioma fuente a múltiples idiomas destino, utilizando:
 
 - 🧠 **Chrome AI Translator API (experimental)**
@@ -72,3 +76,11 @@ VITE_DEEPL_API_KEY=tu_clave_aqui
 ```
 
 Y pásala como parámetro a la función `translateText`.
+
+## 🚀 Despliegue en GitHub Pages
+
+El repo incluye workflow `.github/workflows/deploy.yml`: en cada push a `main` corre `npm ci && npm run build` y publica `dist/` en GitHub Pages via Actions.
+
+Pasos únicos en GitHub (Settings → Pages → Source): elegir **GitHub Actions**. No hace falta rama `gh-pages` ni configuración extra — `vite.config.ts` ya usa `base: './'` (rutas relativas, funciona en cualquier subpath).
+
+`.github/workflows/ci.yml` corre lint + build en cada PR contra `main`.
