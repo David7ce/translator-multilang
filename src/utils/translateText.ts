@@ -1,5 +1,3 @@
-// const DEEPL_API_KEY = import.meta.env.VITE_DEEPL_API_KEY;
-
 export async function translateText({
     text,
     sourceLang,
@@ -25,7 +23,6 @@ export async function translateText({
     }
 
 
-    /*
     // 2. Google Translate (pública, sin clave)
     try {
         const res = await fetch(
@@ -39,28 +36,9 @@ export async function translateText({
         console.warn('Google Translate fallback failed:', err);
     }
 
-    // 3. DeepL fallback
-    if (DEEPL_API_KEY) {
-        try {
-            const res = await fetch('https://api-free.deepl.com/v2/translate', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    Authorization: `DeepL-Auth-Key ${DEEPL_API_KEY}`,
-                },
-                body: new URLSearchParams({
-                    text,
-                    source_lang: sourceLang.toUpperCase(),
-                    target_lang: targetLang.toUpperCase(),
-                }),
-            });
-            const data = await res.json();
-            if (data.translations?.[0]?.text) return data.translations[0].text;
-        } catch (err) {
-            console.warn('DeepL fallback failed:', err);
-        }
-    }
-    */
+    // 3. DeepL fallback: requiere backend/proxy — no viable client-side
+    // (la API Key en VITE_* quedaría expuesta en el bundle público, y el
+    // endpoint de DeepL no admite CORS desde navegador).
 
     return '⚠️ Error al traducir';
 }

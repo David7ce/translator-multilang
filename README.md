@@ -4,18 +4,17 @@
 
 🔗 **Demo:** https://David7ce.github.io/translator-multilang/
 
-Proyecto web desarrollado en **React + TypeScript** que permite traducir texto desde un idioma fuente a múltiples idiomas destino, utilizando:
+Proyecto web desarrollado en **React + TypeScript** que permite traducir texto desde un idioma fuente a múltiples idiomas destino. Funciona en **cualquier navegador**, no solo Chrome:
 
-- 🧠 **Chrome AI Translator API (experimental)**
-- 🟨 Fallback a **Google Translate pública**
-- 🟦 Fallback opcional a **DeepL API**
+- 🧠 **Chrome AI Translator API** (`window.Translator`) — solo Chrome 138+ con el flag/origin trial habilitado. Traduce local, sin red, cuando está disponible.
+- 🟨 **Google Translate pública** (fetch sin clave) — fallback automático, es lo que corre en Firefox, Safari, Edge y Chrome sin la API experimental. Es el camino que usa la demo en producción.
+- 🟦 DeepL — **no implementado** (ver Advertencias).
 
 ## 🚀 Características
 
 - Traducción simultánea a múltiples idiomas seleccionables.
 - UI sencilla con entrada de texto, selección de idioma fuente y checkboxes de idiomas destino.
-- Uso de la API experimental `window.Translator` de Chrome cuando está disponible.
-- Fallbacks automáticos si la API de Chrome no está disponible o lista.
+- Funciona en cualquier navegador vía fallback a Google Translate; en Chrome con la API experimental habilitada, traduce local.
 - Soporte para 12 idiomas populares.
 
 ## 🗂 Estructura del proyecto
@@ -58,24 +57,16 @@ pnpm dev
 
 ## 🧪 Requisitos
 
-- Google Chrome versión **138 o superior** para usar la API local `Translator.create()`.
-- Conexión a internet si se desea usar los fallbacks externos.
-- (Opcional) API Key de DeepL si se quiere usar como segundo fallback.
+- **Cualquier navegador moderno** con conexión a internet — usa el fallback de Google Translate.
+- Opcional: **Google Chrome 138+** con la API `Translator` habilitada, para traducción local sin depender de Google Translate.
 
 ## ⚠️ Advertencias
 
-- La API de Chrome está en fase experimental y puede requerir **interacción del usuario** para iniciar la descarga de modelos.
-- Si el modelo aún no está descargado (`downloading` o `downloadable`), se evitarán errores usando `isAvailable()` antes de crear el traductor.
-
-## 🛠 Configuración de DeepL (opcional)
-
-Para usar DeepL como fallback, proporciona tu clave API en una variable o archivo `.env`:
-
-```env
-VITE_DEEPL_API_KEY=tu_clave_aqui
-```
-
-Y pásala como parámetro a la función `translateText`.
+- Solo Chrome expone `window.Translator`. En el resto de navegadores (Firefox, Safari, Edge) esa rama del código se salta directo al fallback de Google Translate — comportamiento esperado, no es un bug.
+- Aun en Chrome, la API es experimental y puede requerir **interacción del usuario** para iniciar la descarga de modelos, o no estar disponible según versión/flags. Si falla o no existe, cae al mismo fallback.
+- Si el modelo aún no está descargado (`downloading` o `downloadable`), se evitan errores usando `isAvailable()` antes de crear el traductor.
+- El fallback de Google Translate usa un endpoint público no oficial (`translate_a/single`); puede cambiar o dar rate-limit sin aviso.
+- **DeepL no está implementado**: la API no admite CORS desde navegador, y una clave `VITE_*` quedaría expuesta en el bundle público (cualquiera puede leerla en el JS servido). Para sumar DeepL habría que meter un backend/proxy que guarde la clave server-side.
 
 ## 🚀 Despliegue en GitHub Pages
 
